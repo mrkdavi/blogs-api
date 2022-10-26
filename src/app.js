@@ -1,10 +1,13 @@
 const express = require('express');
+const createRouters = require('./routers');
 
 // ...
 
 const app = express();
 
 app.use(express.json());
+
+createRouters(app);
 
 // ...
 
