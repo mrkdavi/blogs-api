@@ -5,7 +5,6 @@ const login = async (req, res) => {
   const token = await authService.login(req.body);
 
   if (!token) {
-    console.log('CHEGUEI AQUI ========');
     const { code, response } = baseError(
       codes.BAD_REQUEST,
       'Invalid fields',
