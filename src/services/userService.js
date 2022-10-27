@@ -24,6 +24,24 @@ const create = async (userData) => {
   }
 };
 
+const getAll = async () => {
+  try {
+    const results = await User.findAll();
+
+    const users = results.map((result) => {
+      const user = { ...result.dataValues };
+      delete user.password;
+      return user;
+    });
+
+    return users;
+  } catch (e) {
+    console.error(e);
+    return baseError(codes.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+  }
+};
+
 module.exports = {
   create,
+  getAll,
 };

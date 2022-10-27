@@ -11,6 +11,13 @@ const create = async (req, res) => {
   res.status(codes.CREATED).json({ token });
 };
 
+const getAll = async (req, res) => {
+  const users = await userService.getAll(req.body);
+
+  res.status(codes.OK).json(users);
+};
+
 module.exports = {
   create,
+  getAll,
 };
