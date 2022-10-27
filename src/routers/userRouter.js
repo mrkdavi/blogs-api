@@ -5,8 +5,10 @@ const validateUser = require('../middlewares/validateUser');
 
 const router = new Router();
 
+router.post('/', validateUser, userController.create);
+
 router.get('/', authentication, userController.getAll);
 
-router.post('/', validateUser, userController.create);
+router.get('/:id', authentication, userController.getById);
 
 module.exports = router;

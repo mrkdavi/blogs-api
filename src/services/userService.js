@@ -41,7 +41,27 @@ const getAll = async () => {
   }
 };
 
+const getById = async (id) => {
+  try {
+    const result = await User.findOne({ where: { id } });
+
+    if (!result) {
+      return baseError(codes.NOT_FOUND, 'User does not exist');
+    }
+
+    const user = { ...result.dataValues };
+
+    delete user.password;
+
+    return user;
+  } catch (e) {
+    console.error(e);
+    return baseError(codes.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+  }
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };

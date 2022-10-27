@@ -8,6 +8,7 @@ const create = async (req, res) => {
     const { code, response } = token;
     return res.status(code).json(response);
   }
+
   res.status(codes.CREATED).json({ token });
 };
 
@@ -17,7 +18,20 @@ const getAll = async (req, res) => {
   res.status(codes.OK).json(users);
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const user = await userService.getById(id);
+
+  if (user.code) {
+    const { code, response } = user;
+    return res.status(code).json(response);
+  }
+
+  res.status(codes.OK).json(user);
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };
