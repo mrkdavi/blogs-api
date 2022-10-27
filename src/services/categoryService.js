@@ -14,22 +14,16 @@ const create = async (categoryData) => {
   }
 };
 
-// const getAll = async () => {
-//   try {
-//     const results = await User.findAll();
+const getAll = async () => {
+  try {
+    const results = await Category.findAll();
 
-//     const users = results.map((result) => {
-//       const user = { ...result.dataValues };
-//       delete user.password;
-//       return user;
-//     });
-
-//     return users;
-//   } catch (e) {
-//     console.error(e);
-//     return baseError(codes.INTERNAL_SERVER_ERROR, 'Internal Server Error');
-//   }
-// };
+    return results;
+  } catch (e) {
+    console.error(e);
+    return baseError(codes.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+  }
+};
 
 // const getById = async (id) => {
 //   try {
@@ -52,6 +46,6 @@ const create = async (categoryData) => {
 
 module.exports = {
   create,
-  // getAll,
+  getAll,
   // getById,
 };

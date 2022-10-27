@@ -6,5 +6,6 @@ const validadeCategory = require('../middlewares/validadeCategory');
 const router = new Router();
 
 router.post('/', authentication, validadeCategory, categoryController.create);
+router.get('/', authentication, categoryController.getAll);
 
 module.exports = router;

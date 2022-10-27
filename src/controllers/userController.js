@@ -13,7 +13,7 @@ const create = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
-  const users = await userService.getAll(req.body);
+  const users = await userService.getAll();
 
   res.status(codes.OK).json(users);
 };

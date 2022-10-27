@@ -12,11 +12,11 @@ const create = async (req, res) => {
   res.status(codes.CREATED).json(category);
 };
 
-// const getAll = async (req, res) => {
-//   const users = await userService.getAll(req.body);
+const getAll = async (req, res) => {
+  const category = await categoryService.getAll();
 
-//   res.status(codes.OK).json(users);
-// };
+  res.status(codes.OK).json(category);
+};
 
 // const getById = async (req, res) => {
 //   const { id } = req.params;
@@ -32,6 +32,6 @@ const create = async (req, res) => {
 
 module.exports = {
   create,
-  // getAll,
+  getAll,
   // getById,
 };
