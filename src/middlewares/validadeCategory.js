@@ -1,14 +1,10 @@
-const { baseError, codes } = require('../utils/baseError');
+const { BadRequest } = require('../@types/errors');
 
 module.exports = (req, res, next) => {
   const { name } = req.body;
   
   if (!name) {
-    const { code, response } = baseError(
-      codes.BAD_REQUEST,
-      '"name" is required',
-    );
-    return res.status(code).json(response);
+    throw new BadRequest('"name" is required');
   }
 
   next();

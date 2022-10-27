@@ -1,19 +1,18 @@
+const { BadRequest } = require('../@types/errors');
 const { User } = require('../models');
 const { generateToken } = require('../utils/token');
 
 const login = async ({ email, password }) => {
-  const result = await User.findOne({
-    where: {
-      email,
-    },
-  });
+  const result = await User.findOne({ where: { email } });
 
-  if (!result) return;
+  if (!result) {
+    throw new BadRequest('Invalid fields');
+  }
 
   const user = { ...result.dataValues };
   
   if (!user || user.password !== password) {
-    return;
+    throw new BadRequest('Invalid fields');
   }
   
   delete user.password;
