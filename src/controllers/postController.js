@@ -8,8 +8,15 @@ const create = async (req, res) => {
 };
 
 const getAllByUserId = async (req, res) => {
-  const { user } = req;
-  const posts = await postService.getAllByUserId(user);
+  const { user, query } = req;
+  const posts = await postService.getAllByUserId(user, query);
+  res.status(codes.OK).json(posts);
+};
+
+const getAllByTerm = async (req, res) => {
+  const { query } = req;
+  console.log(req);
+  const posts = await postService.getAllByTerm(query);
   res.status(codes.OK).json(posts);
 };
 
@@ -21,7 +28,7 @@ const getAllById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { params: { id }, user, body } = req;
-  const posts = await postService.update(id, user.id, body);
+  const posts = await postService.updateById(id, user.id, body);
   res.status(codes.OK).json(posts);
 };
 
@@ -36,5 +43,6 @@ module.exports = {
   updateById,
   deleteById,
   getAllById,
+  getAllByTerm,
   getAllByUserId,
 };

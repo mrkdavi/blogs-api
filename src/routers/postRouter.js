@@ -6,8 +6,9 @@ const validatePost = require('../middlewares/validatePost');
 
 const router = new Router();
 
-router.post('/', authentication, validatePost, errorResolve(postController.create));
+router.get('/search', authentication, errorResolve(postController.getAllByTerm));
 router.get('/', authentication, errorResolve(postController.getAllByUserId));
+router.post('/', authentication, validatePost, errorResolve(postController.create));
 router.get('/:id', authentication, errorResolve(postController.getAllById));
 router.put('/:id', authentication, validatePost, errorResolve(postController.updateById));
 router.delete('/:id', authentication, errorResolve(postController.deleteById));

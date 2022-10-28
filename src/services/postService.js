@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+const { Op } = Sequelize;
+
 const { BlogPost, PostCategory, Category, User } = require('../models');
 
 const config = require('../config/config');
@@ -33,10 +35,10 @@ const create = async (user, postData) => {
       title, content, userId, published: new Date(), updated: new Date(),
     }, { transaction: t });
     const post = { ...postResult.dataValues };
-    await Promise.all(categoryIds.map((categoryId) => (
+    const o = await Promise.all(categoryIds.map((categoryId) => (
       PostCategory.create({ postId: post.id, categoryId,
     }, { transaction: t }))));
-
+    console.log(o);
     return post;
   });
   return result;
@@ -44,8 +46,25 @@ const create = async (user, postData) => {
 
 const getAllByUserId = async (user) => {
   const { id: userId } = user;
+
   return BlogPost.findAll({
     where: { userId },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+};
+
+const getAllByTerm = async (query) => {
+  console.log(query);
+  return BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${query.q}%` } },
+        { content: { [Op.like]: `%${query.q}%` } },
+      ],
+    },
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories' },
@@ -107,5 +126,6 @@ module.exports = {
   getAllById,
   updateById,
   deleteById,
+  getAllByTerm,
   getAllByUserId,
 };
