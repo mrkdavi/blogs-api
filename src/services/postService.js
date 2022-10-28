@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../models');
 
 const config = require('../config/config');
-const { BadRequest } = require('../@types/errors');
+const { BadRequest, NotFound } = require('../@types/errors');
 
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
@@ -38,7 +38,7 @@ const create = async (user, postData) => {
   return result;
 };
 
-const getAllById = async (user) => {
+const getAllByUserId = async (user) => {
   const { id: userId } = user;
   return BlogPost.findAll({
     where: { userId },
@@ -49,7 +49,24 @@ const getAllById = async (user) => {
   });
 };
 
+const getAllById = async (id) => {
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  if (!post) {
+    throw new NotFound('Post does not exist');
+  }
+
+  return post;
+};
+
 module.exports = {
   create,
   getAllById,
+  getAllByUserId,
 };
