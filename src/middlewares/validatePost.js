@@ -1,9 +1,13 @@
 const { BadRequest } = require('../@types/errors');
 
-module.exports = (req, res, next) => {
+module.exports = (req, _res, next) => {
   const { title, content, categoryIds } = req.body;
+  
+  if (!title || !content) {
+    throw new BadRequest('Some required fields are missing');
+  }
 
-  if (!title || !content || !categoryIds || !categoryIds.length) {
+  if (req.method === 'POST' && !categoryIds) {
     throw new BadRequest('Some required fields are missing');
   }
 

@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../models');
 
 const config = require('../config/config');
-const { BadRequest, NotFound } = require('../@types/errors');
+const { BadRequest, NotFound, Unauthorized } = require('../@types/errors');
 
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
@@ -22,6 +22,10 @@ const create = async (user, postData) => {
   const result = await sequelize.transaction(async (t) => {
     const { id: userId } = user;
     const { title, content, categoryIds } = postData;
+
+    if (!categoryIds.length) {
+      throw new BadRequest('Some required fields are missing');
+    }
 
     await verifyCategoryIds(categoryIds);
 
@@ -65,8 +69,32 @@ const getAllById = async (id) => {
   return post;
 };
 
+const update = async (id, userId, postData) => {
+  const oldPost = await BlogPost.findOne({ where: { id } });
+
+  if (!oldPost) throw new NotFound('Post does not exist');
+  console.log(oldPost.userId, userId);
+  if (oldPost.userId !== userId) throw new Unauthorized('Unauthorized user');
+
+  await BlogPost.update(
+    { ...oldPost, ...postData },
+    { where: { id } },
+  );
+
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  return post;
+};
+
 module.exports = {
   create,
+  update,
   getAllById,
   getAllByUserId,
 };

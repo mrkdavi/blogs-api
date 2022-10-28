@@ -9,7 +9,7 @@ const create = async (req, res) => {
 
 const getAllByUserId = async (req, res) => {
   const { user } = req;
-  const posts = await postService.getAllById(user);
+  const posts = await postService.getAllByUserId(user);
   res.status(codes.OK).json(posts);
 };
 
@@ -19,8 +19,15 @@ const getAllById = async (req, res) => {
   res.status(codes.OK).json(posts);
 };
 
+const update = async (req, res) => {
+  const { params: { id }, user, body } = req;
+  const posts = await postService.update(id, user.id, body);
+  res.status(codes.OK).json(posts);
+};
+
 module.exports = {
   create,
+  update,
   getAllById,
   getAllByUserId,
 };
