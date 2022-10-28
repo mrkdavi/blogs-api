@@ -15,7 +15,6 @@ const getAllByUserId = async (req, res) => {
 
 const getAllByTerm = async (req, res) => {
   const { query } = req;
-  console.log(req);
   const posts = await postService.getAllByTerm(query);
   res.status(codes.OK).json(posts);
 };

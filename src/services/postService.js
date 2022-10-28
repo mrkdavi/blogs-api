@@ -35,10 +35,9 @@ const create = async (user, postData) => {
       title, content, userId, published: new Date(), updated: new Date(),
     }, { transaction: t });
     const post = { ...postResult.dataValues };
-    const o = await Promise.all(categoryIds.map((categoryId) => (
+    await Promise.all(categoryIds.map((categoryId) => (
       PostCategory.create({ postId: post.id, categoryId,
     }, { transaction: t }))));
-    console.log(o);
     return post;
   });
   return result;
@@ -56,9 +55,8 @@ const getAllByUserId = async (user) => {
   });
 };
 
-const getAllByTerm = async (query) => {
-  console.log(query);
-  return BlogPost.findAll({
+const getAllByTerm = async (query) => (
+  BlogPost.findAll({
     where: {
       [Op.or]: [
         { title: { [Op.like]: `%${query.q}%` } },
@@ -69,8 +67,8 @@ const getAllByTerm = async (query) => {
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories' },
     ],
-  });
-};
+  })
+);
 
 const getAllById = async (id) => {
   const post = await BlogPost.findOne({
