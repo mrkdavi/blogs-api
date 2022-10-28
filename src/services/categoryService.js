@@ -2,7 +2,7 @@ const { Category } = require('../models');
 
 const create = async (categoryData) => {
   const result = await Category.create(categoryData);
-  const category = { ...result.dataValues, id: result.null };
+  const category = { ...result.dataValues };
   return category;
 };
 
