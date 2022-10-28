@@ -19,15 +19,22 @@ const getAllById = async (req, res) => {
   res.status(codes.OK).json(posts);
 };
 
-const update = async (req, res) => {
+const updateById = async (req, res) => {
   const { params: { id }, user, body } = req;
   const posts = await postService.update(id, user.id, body);
   res.status(codes.OK).json(posts);
 };
 
+const deleteById = async (req, res) => {
+  const { params: { id }, user } = req;
+  await postService.deleteById(id, user.id);
+  res.status(codes.NO_CONTENT).end();
+};
+
 module.exports = {
   create,
-  update,
+  updateById,
+  deleteById,
   getAllById,
   getAllByUserId,
 };

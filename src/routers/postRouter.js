@@ -9,6 +9,7 @@ const router = new Router();
 router.post('/', authentication, validatePost, errorResolve(postController.create));
 router.get('/', authentication, errorResolve(postController.getAllByUserId));
 router.get('/:id', authentication, errorResolve(postController.getAllById));
-router.put('/:id', authentication, validatePost, errorResolve(postController.update));
+router.put('/:id', authentication, validatePost, errorResolve(postController.updateById));
+router.delete('/:id', authentication, errorResolve(postController.deleteById));
 
 module.exports = router;

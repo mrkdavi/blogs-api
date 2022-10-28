@@ -69,11 +69,11 @@ const getAllById = async (id) => {
   return post;
 };
 
-const update = async (id, userId, postData) => {
+const updateById = async (id, userId, postData) => {
   const oldPost = await BlogPost.findOne({ where: { id } });
 
   if (!oldPost) throw new NotFound('Post does not exist');
-  console.log(oldPost.userId, userId);
+
   if (oldPost.userId !== userId) throw new Unauthorized('Unauthorized user');
 
   await BlogPost.update(
@@ -92,9 +92,20 @@ const update = async (id, userId, postData) => {
   return post;
 };
 
+const deleteById = async (id, userId) => {
+  const post = await BlogPost.findOne({ where: { id } });
+
+  if (!post) throw new NotFound('Post does not exist');
+
+  if (post.userId !== userId) throw new Unauthorized('Unauthorized user');
+
+  await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   create,
-  update,
   getAllById,
+  updateById,
+  deleteById,
   getAllByUserId,
 };
